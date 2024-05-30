@@ -28,7 +28,7 @@ $portLists = @{}
 $zones = @{}
 
 # Create CSV files and write the headers
-Set-Content -Path $csvFileRules -Value "Rule Name,vsys,Source Zone,Destination Zone,Source Address,Destination Address,Application,Action"
+Set-Content -Path $csvFileRules -Value "Rule Name,vsys,Source Zone,Destination Zone,Source Address,Destination Address,Application,Action,Description"
 Set-Content -Path $csvFileAddresses -Value "Address Name,vsys,Type,Value,Description"
 Set-Content -Path $csvFileServices -Value "Service Name,vsys,Protocol,Port,Description"
 
@@ -61,9 +61,9 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
 
         # Generate TMSH commands for address objects
         if ($type -eq "IP-Netmask" -or $type -eq "IP-Range") {
-            $tmshScript += "create security firewall address-list $addressName { addresses add { $value } }"
+            $tmshScript += "create security firewall address-list $addressName { addresses add { $value } description `"$description`" }"
         } elseif ($type -eq "FQDN") {
-            $tmshScript += "create security firewall fqdn $addressName { name $value }"
+            $tmshScript += "create security firewall fqdn $addressName { name $value description `"$description`" }"
         }
     }
 }
@@ -94,7 +94,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
 
         # Generate TMSH commands for service objects
         if ($protocol -ne "unknown") {
-            $tmshScript += "create security firewall port-list $serviceName { ports add { $port } }"
+            $tmshScript += "create security firewall port-list $serviceName { ports add { $port } description `"$description`" }"
         }
     }
 }
@@ -111,7 +111,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
         $zones[$zoneName] = $vlanName
 
         # Generate TMSH commands for zone objects
-        $tmshScript += "create sys security zone $zoneName vlans add { $vlanName }"
+        $tmshScript += "create sys security zone $zoneName vlans add { $vlanName } description `"$description`""
     }
 }
 
@@ -145,6 +145,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
         $destinationAddress = Join-XmlElements -elements $rule.destination.member
         $application = Join-XmlElements -elements $rule.application.member
         $action = $rule.action
+        $description = $rule.description
 
         # Translate actions
         if ($action -eq "allow") {
@@ -176,7 +177,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
         }
 
         # Create a CSV line for rules
-        $csvLineRule = "$ruleName,$vsysName,$sourceZone,$destinationZone,$sourceAddress,$destinationAddress,$application,$action"
+        $csvLineRule = "$ruleName,$vsysName,$sourceZone,$destinationZone,$sourceAddress,$destinationAddress,$application,$action,$description"
         Add-Content -Path $csvFileRules -Value $csvLineRule
 
         # Generate TMSH commands for security rules
@@ -188,9 +189,9 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
             $ruleCmd += " destination { address-lists add { $destinationAddress } }"
         }
         if ($serviceCmd -ne "") {
-            $ruleCmd += " destination { $serviceCmd }"
+            $ruleCmd += " $serviceCmd"
         }
-        $ruleCmd += " } }"
+        $ruleCmd += " description `"$description`" place-after first } }"
         $tmshScript += $ruleCmd
     }
 }

@@ -1,11 +1,11 @@
-Rule Name,vsys,Source Zone,Destination Zone,Source Address,Destination Address,Application,Action
-Rule1,vsys1,Zone1,Zone2,Address1,Address2,web-browsing,accept
-Rule2,vsys1,Zone1,Zone2,any,Address3,dns,accept
-Rule3,vsys1,Zone1,Zone2,AddressList1,any,PortList1,accept
-Rule4,vsys1,Zone1,Zone2,Address1,Address2,web-browsing,accept
-Rule5,vsys1,Zone1,Zone2,any,Address3,dns,accept
-Rule6,vsys1,Zone1,Zone2,AddressList1,any,PortList1,accept
-Rule7,vsys1,Zone1,Zone2,Address1,Address2,web-browsing,accept
-Rule8,vsys1,Zone1,Zone2,any,Address3,dns,accept
-Rule9,vsys1,Zone1,Zone2,AddressList1,any,PortList1,accept
-Rule10,vsys1,Zone1,Zone2,any,any,any,drop
+Rule Name,vsys,Source Zone,Destination Zone,Source Address,Destination Address,Application,Action,Description
+Rule1,vsys1,Zone1,Zone2,Address1,Address2,web-browsing,accept,Helpdesk Ticket #12345
+Rule2,vsys1,Zone1,Zone2,any,Address3,dns,accept,Helpdesk Ticket #67890
+Rule3,vsys1,Zone1,Zone2,AddressList1,any,PortList1,accept,Helpdesk Ticket #11223
+Rule4,vsys1,Zone1,Zone2,Address1,Address2,web-browsing,accept,Helpdesk Ticket #44556
+Rule5,vsys1,Zone1,Zone2,any,Address3,dns,accept,Helpdesk Ticket #78901
+Rule6,vsys1,Zone1,Zone2,AddressList1,any,PortList1,accept,Helpdesk Ticket #22334
+Rule7,vsys1,Zone1,Zone2,Address1,Address2,web-browsing,accept,Helpdesk Ticket #55667
+Rule8,vsys1,Zone1,Zone2,any,Address3,dns,accept,Helpdesk Ticket #89012
+Rule9,vsys1,Zone1,Zone2,AddressList1,any,PortList1,accept,Helpdesk Ticket #33445
+Rule10,vsys1,Zone1,Zone2,any,any,any,drop,Default deny rule

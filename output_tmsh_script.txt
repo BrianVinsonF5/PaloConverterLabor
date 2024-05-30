@@ -1,18 +1,18 @@
-create security firewall address-list Address1 { addresses add { 192.168.1.0/24 } }
-create security firewall address-list Address2 { addresses add { 10.0.0.0/8 } }
-create security firewall fqdn Address3 { name example.com }
-create security firewall port-list Service1 { ports add { 80 } }
-create security firewall port-list Service2 { ports add { 53 } }
-create sys security zone Zone1 vlans add { vlan.1 }
-create sys security zone Zone2 vlans add { vlan.2 }
+create security firewall address-list Address1 { addresses add { 192.168.1.0/24 } description "Helpdesk Ticket #1234" }
+create security firewall address-list Address2 { addresses add { 10.0.0.0/8 } description "Helpdesk Ticket #5678" }
+create security firewall fqdn Address3 { name example.com description "Helpdesk Ticket #9101" }
+create security firewall port-list Service1 { ports add { 80 } description "Helpdesk Ticket #3141" }
+create security firewall port-list Service2 { ports add { 53 } description "Helpdesk Ticket #5161" }
+create sys security zone Zone1 vlans add { vlan.1 } description "Helpdesk Ticket #9202"
+create sys security zone Zone2 vlans add { vlan.2 } description "Helpdesk Ticket #1122"
 create security firewall policy vsys1_policy
-modify security firewall policy vsys1_policy rules add { Rule1 { action accept source { address-lists add { Address1 } } destination { address-lists add { Address2 } } destination { port-list add { web-browsing } } } }
-modify security firewall policy vsys1_policy rules add { Rule2 { action accept destination { address-lists add { Address3 } } destination { port-list add { dns } } } }
-modify security firewall policy vsys1_policy rules add { Rule3 { action accept source { address-lists add { AddressList1 } } destination { port-list add { PortList1 } } } }
-modify security firewall policy vsys1_policy rules add { Rule4 { action accept source { address-lists add { Address1 } } destination { address-lists add { Address2 } } destination { port-list add { web-browsing } } } }
-modify security firewall policy vsys1_policy rules add { Rule5 { action accept destination { address-lists add { Address3 } } destination { port-list add { dns } } } }
-modify security firewall policy vsys1_policy rules add { Rule6 { action accept source { address-lists add { AddressList1 } } destination { port-list add { PortList1 } } } }
-modify security firewall policy vsys1_policy rules add { Rule7 { action accept source { address-lists add { Address1 } } destination { address-lists add { Address2 } } destination { port-list add { web-browsing } } } }
-modify security firewall policy vsys1_policy rules add { Rule8 { action accept destination { address-lists add { Address3 } } destination { port-list add { dns } } } }
-modify security firewall policy vsys1_policy rules add { Rule9 { action accept source { address-lists add { AddressList1 } } destination { port-list add { PortList1 } } } }
-modify security firewall policy vsys1_policy rules add { Rule10 { action drop } }
+modify security firewall policy vsys1_policy rules add { Rule1 { action accept source { address-lists add { Address1 } } destination { address-lists add { Address2 } } destination { port-list add { web-browsing } } description "Helpdesk Ticket #12345" } }
+modify security firewall policy vsys1_policy rules add { Rule2 { action accept destination { address-lists add { Address3 } } destination { port-list add { dns } } description "Helpdesk Ticket #67890" } }
+modify security firewall policy vsys1_policy rules add { Rule3 { action accept source { address-lists add { AddressList1 } } destination { port-list add { PortList1 } } description "Helpdesk Ticket #11223" } }
+modify security firewall policy vsys1_policy rules add { Rule4 { action accept source { address-lists add { Address1 } } destination { address-lists add { Address2 } } destination { port-list add { web-browsing } } description "Helpdesk Ticket #44556" } }
+modify security firewall policy vsys1_policy rules add { Rule5 { action accept destination { address-lists add { Address3 } } destination { port-list add { dns } } description "Helpdesk Ticket #78901" } }
+modify security firewall policy vsys1_policy rules add { Rule6 { action accept source { address-lists add { AddressList1 } } destination { port-list add { PortList1 } } description "Helpdesk Ticket #22334" } }
+modify security firewall policy vsys1_policy rules add { Rule7 { action accept source { address-lists add { Address1 } } destination { address-lists add { Address2 } } destination { port-list add { web-browsing } } description "Helpdesk Ticket #55667" } }
+modify security firewall policy vsys1_policy rules add { Rule8 { action accept destination { address-lists add { Address3 } } destination { port-list add { dns } } description "Helpdesk Ticket #89012" } }
+modify security firewall policy vsys1_policy rules add { Rule9 { action accept source { address-lists add { AddressList1 } } destination { port-list add { PortList1 } } description "Helpdesk Ticket #33445" } }
+modify security firewall policy vsys1_policy rules add { Rule10 { action drop description "Default deny rule" } }
