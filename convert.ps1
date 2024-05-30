@@ -98,6 +98,22 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
     }
 }
 
+# Function to handle missing lists
+function Handle-MissingList {
+    param (
+        [string]$listType,
+        [string]$listName
+    )
+    $input = Read-Host "Missing $listType list for $listName. Please provide the $listType values (comma-separated)"
+    if ($listType -eq "address") {
+        $tmshScript += "create security firewall address-list $listName { addresses add { $input } }"
+        $addressLists[$listName] = $true
+    } elseif ($listType -eq "port") {
+        $tmshScript += "create security firewall port-list $listName { ports add { $input } }"
+        $portLists[$listName] = $true
+    }
+}
+
 # Extract and write security rules, checking for missing address and port lists
 foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
     $vsysName = $vsys.name
@@ -122,16 +138,13 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
 
         # Check for missing address and port lists, excluding "any"
         if ($sourceAddress -ne "any" -and -not $addressLists.ContainsKey($sourceAddress)) {
-            Write-Error "Missing address list for source address: $sourceAddress"
-            exit 1
+            Handle-MissingList -listType "address" -listName $sourceAddress
         }
         if ($destinationAddress -ne "any" -and -not $addressLists.ContainsKey($destinationAddress)) {
-            Write-Error "Missing address list for destination address: $destinationAddress"
-            exit 1
+            Handle-MissingList -listType "address" -listName $destinationAddress
         }
         if ($application -ne "any" -and -not $portLists.ContainsKey($application)) {
-            Write-Error "Missing port list for application: $application"
-            exit 1
+            Handle-MissingList -listType "port" -listName $application
         }
 
         # Determine if the application is a port list or a direct port
@@ -142,7 +155,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
                 "ports add { $application }"
             }
         } else {
-            "ports add { any }"
+            ""
         }
 
         # Create a CSV line for rules
@@ -150,7 +163,18 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
         Add-Content -Path $csvFileRules -Value $csvLineRule
 
         # Generate TMSH commands for security rules
-        $tmshScript += "modify security firewall policy $policyName rules add { $ruleName { action $action source { addresses add { $sourceAddress } } destination { addresses add { $destinationAddress } } $serviceCmd } }"
+        $ruleCmd = "modify security firewall policy $policyName rules add { $ruleName { action $action"
+        if ($sourceAddress -ne "any") {
+            $ruleCmd += " source { address-lists add { $sourceAddress } }"
+        }
+        if ($destinationAddress -ne "any") {
+            $ruleCmd += " destination { address-lists add { $destinationAddress } }"
+        }
+        if ($serviceCmd -ne "") {
+            $ruleCmd += " $serviceCmd"
+        }
+        $ruleCmd += " } }"
+        $tmshScript += $ruleCmd
     }
 }
 

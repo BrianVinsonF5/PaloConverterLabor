@@ -5,7 +5,7 @@ create security firewall port-list web-service { ports add { 80 } }
 create security firewall port-list database-service { ports add { 3306 } }
 create security firewall port-list ssh-service { ports add { 22 } }
 create security firewall policy vsys1_policy
-modify security firewall policy vsys1_policy rules add { Allow-Web-Traffic { action accept source { addresses add { any } } destination { addresses add { any } } service web-browsing } }
-modify security firewall policy vsys1_policy rules add { Deny-All-Traffic { action drop source { addresses add { any } } destination { addresses add { any } } service any } }
+modify security firewall policy vsys1_policy rules add { Allow-Web-Traffic { action accept port-lists add { web-browsing } } }
+modify security firewall policy vsys1_policy rules add { Deny-All-Traffic { action drop } }
 create security firewall policy vsys2_policy
-modify security firewall policy vsys2_policy rules add { Allow-SSH { action accept source { addresses add { any } } destination { addresses add { any } } service ssh } }
+modify security firewall policy vsys2_policy rules add { Allow-SSH { action accept port-lists add { ssh } } }
