@@ -185,11 +185,15 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
         if ($sourceAddress -ne "any") {
             $ruleCmd += " source { address-lists add { $sourceAddress } }"
         }
-        if ($destinationAddress -ne "any") {
-            $ruleCmd += " destination { address-lists add { $destinationAddress } }"
-        }
-        if ($serviceCmd -ne "") {
-            $ruleCmd += " $serviceCmd"
+        if ($destinationAddress -ne "any" -or $serviceCmd -ne "") {
+            $ruleCmd += " destination {"
+            if ($destinationAddress -ne "any") {
+                $ruleCmd += " address-lists add { $destinationAddress }"
+            }
+            if ($serviceCmd -ne "") {
+                $ruleCmd += " $serviceCmd"
+            }
+            $ruleCmd += " }"
         }
         $ruleCmd += " description `"$description`" place-after first } }"
         $tmshScript += $ruleCmd
