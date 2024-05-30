@@ -32,6 +32,9 @@ Set-Content -Path $csvFileServices -Value "Service Name,vsys,Protocol,Port,Descr
 # Extract and write security rules
 foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
     $vsysName = $vsys.name
+    $policyName = "${vsysName}_policy"
+    $tmshScript += "create security firewall policy $policyName"
+
     foreach ($rule in $vsys."rulebase"."security"."rules"."entry") {
         $ruleName = $rule.name
         $sourceZone = Join-XmlElements -elements $rule.from.member
@@ -46,7 +49,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
         Add-Content -Path $csvFileRules -Value $csvLineRule
 
         # Generate TMSH commands for security rules
-        $tmshScript += "create security firewall rule $ruleName { action $action from-zone $sourceZone to-zone $destinationZone source-address-list { $sourceAddress } destination-address-list { $destinationAddress } service { $application } }"
+        $tmshScript += "modify security firewall policy $policyName rules add { $ruleName { action $action source { addresses add { $sourceAddress } } destination { addresses add { $destinationAddress } } service $application } }"
     }
 }
 
@@ -76,9 +79,9 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
 
         # Generate TMSH commands for address objects
         if ($type -eq "IP-Netmask" -or $type -eq "IP-Range") {
-            $tmshScript += "create net address-list $addressName { addresses add { $value } }"
+            $tmshScript += "create security firewall address-list $addressName { addresses add { $value } }"
         } elseif ($type -eq "FQDN") {
-            $tmshScript += "create net fqdn $addressName { name $value }"
+            $tmshScript += "create security firewall fqdn $addressName { name $value }"
         }
     }
 }
@@ -106,7 +109,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
 
         # Generate TMSH commands for service objects
         if ($protocol -ne "unknown") {
-            $tmshScript += "create ltm policy rule $serviceName { requires { ltm } controls { forward } action { forward } match { protocol $protocol destination-port $port } description `"$description`" }"
+            $tmshScript += "create security firewall port-list $serviceName { ports add { $port } }"
         }
     }
 }
