@@ -1,11 +1,18 @@
-create security firewall address-list web-server { addresses add { 192.168.1.100/32 } }
-create security firewall address-list database-server { addresses add { 192.168.1.101/32 } }
-create security firewall address-list dmz-server { addresses add { 192.168.2.100/32 } }
-create security firewall port-list web-service { ports add { 80 } }
-create security firewall port-list database-service { ports add { 3306 } }
-create security firewall port-list ssh-service { ports add { 22 } }
+create security firewall address-list Address1 { addresses add { 192.168.1.0/24 } }
+create security firewall address-list Address2 { addresses add { 10.0.0.0/8 } }
+create security firewall fqdn Address3 { name example.com }
+create security firewall port-list Service1 { ports add { 80 } }
+create security firewall port-list Service2 { ports add { 53 } }
+create sys security zone Zone1 vlans add { vlan.1 }
+create sys security zone Zone2 vlans add { vlan.2 }
 create security firewall policy vsys1_policy
-modify security firewall policy vsys1_policy rules add { Allow-Web-Traffic { action accept port-list add { web-browsing } } }
-modify security firewall policy vsys1_policy rules add { Deny-All-Traffic { action drop } }
-create security firewall policy vsys2_policy
-modify security firewall policy vsys2_policy rules add { Allow-SSH { action accept port-list add { ssh } } }
+modify security firewall policy vsys1_policy rules add { Rule1 { action accept source { address-lists add { Address1 } } destination { address-lists add { Address2 } } destination { port-list add { web-browsing } } } }
+modify security firewall policy vsys1_policy rules add { Rule2 { action accept destination { address-lists add { Address3 } } destination { port-list add { dns } } } }
+modify security firewall policy vsys1_policy rules add { Rule3 { action accept source { address-lists add { AddressList1 } } destination { port-list add { PortList1 } } } }
+modify security firewall policy vsys1_policy rules add { Rule4 { action accept source { address-lists add { Address1 } } destination { address-lists add { Address2 } } destination { port-list add { web-browsing } } } }
+modify security firewall policy vsys1_policy rules add { Rule5 { action accept destination { address-lists add { Address3 } } destination { port-list add { dns } } } }
+modify security firewall policy vsys1_policy rules add { Rule6 { action accept source { address-lists add { AddressList1 } } destination { port-list add { PortList1 } } } }
+modify security firewall policy vsys1_policy rules add { Rule7 { action accept source { address-lists add { Address1 } } destination { address-lists add { Address2 } } destination { port-list add { web-browsing } } } }
+modify security firewall policy vsys1_policy rules add { Rule8 { action accept destination { address-lists add { Address3 } } destination { port-list add { dns } } } }
+modify security firewall policy vsys1_policy rules add { Rule9 { action accept source { address-lists add { AddressList1 } } destination { port-list add { PortList1 } } } }
+modify security firewall policy vsys1_policy rules add { Rule10 { action drop } }

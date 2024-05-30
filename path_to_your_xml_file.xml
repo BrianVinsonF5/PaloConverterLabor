@@ -1,122 +1,274 @@
 <config>
-    <devices>
-        <entry name="localhost.localdomain">
-            <vsys>
-                <entry name="vsys1">
-                    <rulebase>
-                        <security>
-                            <rules>
-                                <entry name="Allow-Web-Traffic">
-                                    <from>
-                                        <member>trust</member>
-                                    </from>
-                                    <to>
-                                        <member>untrust</member>
-                                    </to>
-                                    <source>
-                                        <member>any</member>
-                                    </source>
-                                    <destination>
-                                        <member>any</member>
-                                    </destination>
-                                    <application>
-                                        <member>web-browsing</member>
-                                    </application>
-                                    <action>allow</action>
-                                </entry>
-                                <entry name="Deny-All-Traffic">
-                                    <from>
-                                        <member>untrust</member>
-                                    </from>
-                                    <to>
-                                        <member>trust</member>
-                                    </to>
-                                    <source>
-                                        <member>any</member>
-                                    </source>
-                                    <destination>
-                                        <member>any</member>
-                                    </destination>
-                                    <application>
-                                        <member>any</member>
-                                    </application>
-                                    <action>deny</action>
-                                </entry>
-                            </rules>
-                        </security>
-                    </rulebase>
-                    <address>
-                        <entry name="web-server">
-                            <ip-netmask>192.168.1.100/32</ip-netmask>
-                            <description>Web Server</description>
-                        </entry>
-                        <entry name="database-server">
-                            <ip-netmask>192.168.1.101/32</ip-netmask>
-                            <description>Database Server</description>
-                        </entry>
-                    </address>
-                    <service>
-                        <entry name="web-service">
-                            <protocol>
-                                <tcp>
-                                    <port>80</port>
-                                </tcp>
-                            </protocol>
-                            <description>Web Service</description>
-                        </entry>
-                        <entry name="database-service">
-                            <protocol>
-                                <tcp>
-                                    <port>3306</port>
-                                </tcp>
-                            </protocol>
-                            <description>Database Service</description>
-                        </entry>
-                    </service>
+  <devices>
+    <entry name="localhost.localdomain">
+      <vsys>
+        <entry name="vsys1">
+          <address>
+            <entry name="Address1">
+              <ip-netmask>192.168.1.0/24</ip-netmask>
+              <description>Helpdesk Ticket #1234</description>
+            </entry>
+            <entry name="Address2">
+              <ip-netmask>10.0.0.0/8</ip-netmask>
+              <description>Helpdesk Ticket #5678</description>
+            </entry>
+            <entry name="Address3">
+              <fqdn>example.com</fqdn>
+              <description>Helpdesk Ticket #9101</description>
+            </entry>
+          </address>
+          <address-group>
+            <entry name="AddressList1">
+              <static>
+                <member>Address1</member>
+                <member>Address2</member>
+              </static>
+              <description>Helpdesk Ticket #1121</description>
+            </entry>
+          </address-group>
+          <service>
+            <entry name="Service1">
+              <protocol>
+                <tcp>
+                  <port>80</port>
+                </tcp>
+              </protocol>
+              <description>Helpdesk Ticket #3141</description>
+            </entry>
+            <entry name="Service2">
+              <protocol>
+                <udp>
+                  <port>53</port>
+                </udp>
+              </protocol>
+              <description>Helpdesk Ticket #5161</description>
+            </entry>
+          </service>
+          <service-group>
+            <entry name="PortList1">
+              <members>
+                <member>Service1</member>
+                <member>Service2</member>
+              </members>
+              <description>Helpdesk Ticket #7181</description>
+            </entry>
+          </service-group>
+          <zone>
+            <entry name="Zone1">
+              <network>
+                <layer3>
+                  <member>vlan.1</member>
+                </layer3>
+              </network>
+              <description>Helpdesk Ticket #9202</description>
+            </entry>
+            <entry name="Zone2">
+              <network>
+                <layer3>
+                  <member>vlan.2</member>
+                </layer3>
+              </network>
+              <description>Helpdesk Ticket #1122</description>
+            </entry>
+          </zone>
+          <rulebase>
+            <security>
+              <rules>
+                <entry name="Rule1">
+                  <from>
+                    <member>Zone1</member>
+                  </from>
+                  <to>
+                    <member>Zone2</member>
+                  </to>
+                  <source>
+                    <member>Address1</member>
+                  </source>
+                  <destination>
+                    <member>Address2</member>
+                  </destination>
+                  <application>
+                    <member>web-browsing</member>
+                  </application>
+                  <action>allow</action>
+                  <description>Helpdesk Ticket #12345</description>
                 </entry>
-                <entry name="vsys2">
-                    <rulebase>
-                        <security>
-                            <rules>
-                                <entry name="Allow-SSH">
-                                    <from>
-                                        <member>dmz</member>
-                                    </from>
-                                    <to>
-                                        <member>trust</member>
-                                    </to>
-                                    <source>
-                                        <member>any</member>
-                                    </source>
-                                    <destination>
-                                        <member>any</member>
-                                    </destination>
-                                    <application>
-                                        <member>ssh</member>
-                                    </application>
-                                    <action>allow</action>
-                                </entry>
-                            </rules>
-                        </security>
-                    </rulebase>
-                    <address>
-                        <entry name="dmz-server">
-                            <ip-netmask>192.168.2.100/32</ip-netmask>
-                            <description>DMZ Server</description>
-                        </entry>
-                    </address>
-                    <service>
-                        <entry name="ssh-service">
-                            <protocol>
-                                <tcp>
-                                    <port>22</port>
-                                </tcp>
-                            </protocol>
-                            <description>SSH Service</description>
-                        </entry>
-                    </service>
+                <entry name="Rule2">
+                  <from>
+                    <member>Zone1</member>
+                  </from>
+                  <to>
+                    <member>Zone2</member>
+                  </to>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>Address3</member>
+                  </destination>
+                  <application>
+                    <member>dns</member>
+                  </application>
+                  <action>allow</action>
+                  <description>Helpdesk Ticket #67890</description>
                 </entry>
-            </vsys>
+                <entry name="Rule3">
+                  <from>
+                    <member>Zone1</member>
+                  </from>
+                  <to>
+                    <member>Zone2</member>
+                  </to>
+                  <source>
+                    <member>AddressList1</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <application>
+                    <member>PortList1</member>
+                  </application>
+                  <action>allow</action>
+                  <description>Helpdesk Ticket #11223</description>
+                </entry>
+                <entry name="Rule4">
+                  <from>
+                    <member>Zone1</member>
+                  </from>
+                  <to>
+                    <member>Zone2</member>
+                  </to>
+                  <source>
+                    <member>Address1</member>
+                  </source>
+                  <destination>
+                    <member>Address2</member>
+                  </destination>
+                  <application>
+                    <member>web-browsing</member>
+                  </application>
+                  <action>allow</action>
+                  <description>Helpdesk Ticket #44556</description>
+                </entry>
+                <entry name="Rule5">
+                  <from>
+                    <member>Zone1</member>
+                  </from>
+                  <to>
+                    <member>Zone2</member>
+                  </to>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>Address3</member>
+                  </destination>
+                  <application>
+                    <member>dns</member>
+                  </application>
+                  <action>allow</action>
+                  <description>Helpdesk Ticket #78901</description>
+                </entry>
+                <entry name="Rule6">
+                  <from>
+                    <member>Zone1</member>
+                  </from>
+                  <to>
+                    <member>Zone2</member>
+                  </to>
+                  <source>
+                    <member>AddressList1</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <application>
+                    <member>PortList1</member>
+                  </application>
+                  <action>allow</action>
+                  <description>Helpdesk Ticket #22334</description>
+                </entry>
+                <entry name="Rule7">
+                  <from>
+                    <member>Zone1</member>
+                  </from>
+                  <to>
+                    <member>Zone2</member>
+                  </to>
+                  <source>
+                    <member>Address1</member>
+                  </source>
+                  <destination>
+                    <member>Address2</member>
+                  </destination>
+                  <application>
+                    <member>web-browsing</member>
+                  </application>
+                  <action>allow</action>
+                  <description>Helpdesk Ticket #55667</description>
+                </entry>
+                <entry name="Rule8">
+                  <from>
+                    <member>Zone1</member>
+                  </from>
+                  <to>
+                    <member>Zone2</member>
+                  </to>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>Address3</member>
+                  </destination>
+                  <application>
+                    <member>dns</member>
+                  </application>
+                  <action>allow</action>
+                  <description>Helpdesk Ticket #89012</description>
+                </entry>
+                <entry name="Rule9">
+                  <from>
+                    <member>Zone1</member>
+                  </from>
+                  <to>
+                    <member>Zone2</member>
+                  </to>
+                  <source>
+                    <member>AddressList1</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <application>
+                    <member>PortList1</member>
+                  </application>
+                  <action>allow</action>
+                  <description>Helpdesk Ticket #33445</description>
+                </entry>
+                <entry name="Rule10">
+                  <from>
+                    <member>Zone1</member>
+                  </from>
+                  <to>
+                    <member>Zone2</member>
+                  </to>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <application>
+                    <member>any</member>
+                  </application>
+                  <action>deny</action>
+                  <description>Default deny rule</description>
+                </entry>
+              </rules>
+            </security>
+          </rulebase>
         </entry>
-    </devices>
+      </vsys>
+    </entry>
+  </devices>
 </config>

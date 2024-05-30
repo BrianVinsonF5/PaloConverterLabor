@@ -25,6 +25,7 @@ function Join-XmlElements {
 $tmshScript = @()
 $addressLists = @{}
 $portLists = @{}
+$zones = @{}
 
 # Create CSV files and write the headers
 Set-Content -Path $csvFileRules -Value "Rule Name,vsys,Source Zone,Destination Zone,Source Address,Destination Address,Application,Action"
@@ -95,6 +96,22 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
         if ($protocol -ne "unknown") {
             $tmshScript += "create security firewall port-list $serviceName { ports add { $port } }"
         }
+    }
+}
+
+# Extract and write zone objects
+foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
+    $vsysName = $vsys.name
+    foreach ($zone in $vsys."zone"."entry") {
+        $zoneName = $zone.name
+        $vlanName = Join-XmlElements -elements $zone.network.layer3.member
+        $description = $zone.description
+
+        # Add to zones list
+        $zones[$zoneName] = $vlanName
+
+        # Generate TMSH commands for zone objects
+        $tmshScript += "create sys security zone $zoneName vlans add { $vlanName }"
     }
 }
 
@@ -171,7 +188,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
             $ruleCmd += " destination { address-lists add { $destinationAddress } }"
         }
         if ($serviceCmd -ne "") {
-            $ruleCmd += " $serviceCmd"
+            $ruleCmd += " destination { $serviceCmd }"
         }
         $ruleCmd += " } }"
         $tmshScript += $ruleCmd

@@ -1,4 +1,4 @@
 Address Name,vsys,Type,Value,Description
-web-server,vsys1,IP-Netmask,192.168.1.100/32,Web Server
-database-server,vsys1,IP-Netmask,192.168.1.101/32,Database Server
-dmz-server,vsys2,IP-Netmask,192.168.2.100/32,DMZ Server
+Address1,vsys1,IP-Netmask,192.168.1.0/24,Helpdesk Ticket #1234
+Address2,vsys1,IP-Netmask,10.0.0.0/8,Helpdesk Ticket #5678
+Address3,vsys1,FQDN,example.com,Helpdesk Ticket #9101
