@@ -94,7 +94,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
 
         # Generate TMSH commands for service objects
         if ($protocol -ne "unknown") {
-            $tmshScript += "create security firewall port-list $serviceName { ports add { $port } description `"$description`" }"
+            $tmshScript += "create security firewall port-lists $serviceName { ports add { $port } description `"$description`" }"
         }
     }
 }
@@ -126,7 +126,7 @@ function Handle-MissingList {
         $tmshScript += "create security firewall address-list $listName { addresses add { $input } }"
         $addressLists[$listName] = $true
     } elseif ($listType -eq "port") {
-        $tmshScript += "create security firewall port-list $listName { ports add { $input } }"
+        $tmshScript += "create security firewall port-lists $listName { ports add { $input } }"
         $portLists[$listName] = $true
     }
 }
@@ -168,7 +168,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
         # Determine if the application is a port list or a direct port
         $serviceCmd = if ($application -ne "any") {
             if ($portLists.ContainsKey($application)) {
-                "port-list add { $application }"
+                "port-lists add { $application }"
             } else {
                 "ports add { $application }"
             }
