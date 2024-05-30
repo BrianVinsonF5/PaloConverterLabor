@@ -1,0 +1,9 @@
+create security firewall rule Allow-Web-Traffic { action allow from-zone trust to-zone untrust source-address-list { any } destination-address-list { any } service { web-browsing } }
+create security firewall rule Deny-All-Traffic { action deny from-zone untrust to-zone trust source-address-list { any } destination-address-list { any } service { any } }
+create security firewall rule Allow-SSH { action allow from-zone dmz to-zone trust source-address-list { any } destination-address-list { any } service { ssh } }
+create net address-list web-server { addresses add { 192.168.1.100/32 } }
+create net address-list database-server { addresses add { 192.168.1.101/32 } }
+create net address-list dmz-server { addresses add { 192.168.2.100/32 } }
+create ltm policy rule web-service { requires { ltm } controls { forward } action { forward } match { protocol tcp destination-port 80 } description "Web Service" }
+create ltm policy rule database-service { requires { ltm } controls { forward } action { forward } match { protocol tcp destination-port 3306 } description "Database Service" }
+create ltm policy rule ssh-service { requires { ltm } controls { forward } action { forward } match { protocol tcp destination-port 22 } description "SSH Service" }

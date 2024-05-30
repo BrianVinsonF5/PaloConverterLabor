@@ -1,0 +1,122 @@
+<config>
+    <devices>
+        <entry name="localhost.localdomain">
+            <vsys>
+                <entry name="vsys1">
+                    <rulebase>
+                        <security>
+                            <rules>
+                                <entry name="Allow-Web-Traffic">
+                                    <from>
+                                        <member>trust</member>
+                                    </from>
+                                    <to>
+                                        <member>untrust</member>
+                                    </to>
+                                    <source>
+                                        <member>any</member>
+                                    </source>
+                                    <destination>
+                                        <member>any</member>
+                                    </destination>
+                                    <application>
+                                        <member>web-browsing</member>
+                                    </application>
+                                    <action>allow</action>
+                                </entry>
+                                <entry name="Deny-All-Traffic">
+                                    <from>
+                                        <member>untrust</member>
+                                    </from>
+                                    <to>
+                                        <member>trust</member>
+                                    </to>
+                                    <source>
+                                        <member>any</member>
+                                    </source>
+                                    <destination>
+                                        <member>any</member>
+                                    </destination>
+                                    <application>
+                                        <member>any</member>
+                                    </application>
+                                    <action>deny</action>
+                                </entry>
+                            </rules>
+                        </security>
+                    </rulebase>
+                    <address>
+                        <entry name="web-server">
+                            <ip-netmask>192.168.1.100/32</ip-netmask>
+                            <description>Web Server</description>
+                        </entry>
+                        <entry name="database-server">
+                            <ip-netmask>192.168.1.101/32</ip-netmask>
+                            <description>Database Server</description>
+                        </entry>
+                    </address>
+                    <service>
+                        <entry name="web-service">
+                            <protocol>
+                                <tcp>
+                                    <port>80</port>
+                                </tcp>
+                            </protocol>
+                            <description>Web Service</description>
+                        </entry>
+                        <entry name="database-service">
+                            <protocol>
+                                <tcp>
+                                    <port>3306</port>
+                                </tcp>
+                            </protocol>
+                            <description>Database Service</description>
+                        </entry>
+                    </service>
+                </entry>
+                <entry name="vsys2">
+                    <rulebase>
+                        <security>
+                            <rules>
+                                <entry name="Allow-SSH">
+                                    <from>
+                                        <member>dmz</member>
+                                    </from>
+                                    <to>
+                                        <member>trust</member>
+                                    </to>
+                                    <source>
+                                        <member>any</member>
+                                    </source>
+                                    <destination>
+                                        <member>any</member>
+                                    </destination>
+                                    <application>
+                                        <member>ssh</member>
+                                    </application>
+                                    <action>allow</action>
+                                </entry>
+                            </rules>
+                        </security>
+                    </rulebase>
+                    <address>
+                        <entry name="dmz-server">
+                            <ip-netmask>192.168.2.100/32</ip-netmask>
+                            <description>DMZ Server</description>
+                        </entry>
+                    </address>
+                    <service>
+                        <entry name="ssh-service">
+                            <protocol>
+                                <tcp>
+                                    <port>22</port>
+                                </tcp>
+                            </protocol>
+                            <description>SSH Service</description>
+                        </entry>
+                    </service>
+                </entry>
+            </vsys>
+        </entry>
+    </devices>
+</config>
