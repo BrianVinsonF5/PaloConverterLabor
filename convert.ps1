@@ -44,6 +44,13 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
         $application = Join-XmlElements -elements $rule.application.member
         $action = $rule.action
 
+        # Translate actions
+        if ($action -eq "allow") {
+            $action = "accept"
+        } elseif ($action -eq "deny") {
+            $action = "drop"
+        }
+
         # Create a CSV line for rules
         $csvLineRule = "$ruleName,$vsysName,$sourceZone,$destinationZone,$sourceAddress,$destinationAddress,$application,$action"
         Add-Content -Path $csvFileRules -Value $csvLineRule

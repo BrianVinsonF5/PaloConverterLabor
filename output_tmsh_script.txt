@@ -1,8 +1,8 @@
 create security firewall policy vsys1_policy
-modify security firewall policy vsys1_policy rules add { Allow-Web-Traffic { action allow source { addresses add { any } } destination { addresses add { any } } service web-browsing } }
-modify security firewall policy vsys1_policy rules add { Deny-All-Traffic { action deny source { addresses add { any } } destination { addresses add { any } } service any } }
+modify security firewall policy vsys1_policy rules add { Allow-Web-Traffic { action accept source { addresses add { any } } destination { addresses add { any } } service web-browsing } }
+modify security firewall policy vsys1_policy rules add { Deny-All-Traffic { action drop source { addresses add { any } } destination { addresses add { any } } service any } }
 create security firewall policy vsys2_policy
-modify security firewall policy vsys2_policy rules add { Allow-SSH { action allow source { addresses add { any } } destination { addresses add { any } } service ssh } }
+modify security firewall policy vsys2_policy rules add { Allow-SSH { action accept source { addresses add { any } } destination { addresses add { any } } service ssh } }
 create security firewall address-list web-server { addresses add { 192.168.1.100/32 } }
 create security firewall address-list database-server { addresses add { 192.168.1.101/32 } }
 create security firewall address-list dmz-server { addresses add { 192.168.2.100/32 } }
