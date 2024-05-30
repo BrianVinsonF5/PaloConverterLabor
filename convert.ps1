@@ -150,7 +150,7 @@ foreach ($vsys in $xml.config.devices.entry.vsys.entry) {
         # Determine if the application is a port list or a direct port
         $serviceCmd = if ($application -ne "any") {
             if ($portLists.ContainsKey($application)) {
-                "port-lists add { $application }"
+                "port-list add { $application }"
             } else {
                 "ports add { $application }"
             }
