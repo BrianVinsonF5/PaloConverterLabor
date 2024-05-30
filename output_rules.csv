@@ -1,4 +1,1 @@
 Rule Name,vsys,Source Zone,Destination Zone,Source Address,Destination Address,Application,Action
-Allow-Web-Traffic,vsys1,trust,untrust,any,any,web-browsing,accept
-Deny-All-Traffic,vsys1,untrust,trust,any,any,any,drop
-Allow-SSH,vsys2,dmz,trust,any,any,ssh,accept
